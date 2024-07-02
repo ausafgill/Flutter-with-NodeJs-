@@ -1,0 +1,87 @@
+import mongoose from "mongoose";
+import { ITweetInterface } from "../database/interfaces/tweet.interface";
+import TweetModel from "../database/models/tweet.model";
+
+export const getTweetRepo= async (tid:string): Promise<ITweetInterface |null>=>{
+    try {
+        const tweet= await TweetModel.findOne({tweetId:tid});
+    return tweet;
+    } catch (error) {
+        console.log(error);
+        return null;
+        
+    }
+}
+export const deleteTweetRepo= async (tid:string):Promise<boolean>=>{
+    try {
+        const delTweet= await TweetModel.findOneAndDelete({tweetId:tid});
+        if(delTweet){
+            return true;
+        }
+        else{
+            return false;
+        }
+    } catch (error) {
+         console.log(error);
+         return false;
+    }
+}
+
+export const createNewTweet= async(newTweet:ITweetInterface): Promise<boolean>=>{
+    try {
+        const newT =  await TweetModel.create(newTweet);
+        if(newT){
+            return true;
+        }
+        else{
+            return false;
+        }
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+export const updateNewTweet= async (tid:string,newUpdate:ITweetInterface):Promise<boolean>=>{
+    try {
+        const update= await TweetModel.findOneAndUpdate({tweetId:tid},newUpdate,{new:true})
+        if(update){
+            return true;
+        }
+        else{
+            return false;
+        }
+    } catch (error) {
+        console.log(error);
+        return false;
+        
+    }
+}
+
+// export  const getAdminIdFromTweetId= async(tweetId:string):Promise<string>=>{
+// try {
+//     const adminID=  await TweetModel.findOne({tweetId:tweetId}).select('adminId');
+//     if(adminID){
+//         return adminID ;
+//     }
+//     else{
+//         return '';
+//     }
+// } catch (error) {
+//     console.log(error);
+//     return false;
+    
+// }
+// }
+export const getAdminIdFromTweetId = async (tweetId: string): Promise<string> => {
+    try {
+        const tweet = await TweetModel.findOne({ tweetId }).select('adminId').lean();
+        if (tweet && tweet.adminId) {
+            return tweet.adminId;
+        } else {
+            return '';
+        }
+    } catch (error) {
+        console.log(error);
+        return '';
+    }
+};
