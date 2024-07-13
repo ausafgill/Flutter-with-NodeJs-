@@ -84,7 +84,7 @@ try {
 
 const tweetWithAdminInfo= await Promise.all(
     allTweets.map(async(tweet)=>{
-        const admin =await UserModel.find({userId:tweet.adminId})
+        const admin =await UserModel.findOne({userId:tweet.adminId})
         if(!admin){
             return {tweet,admin:null};
         }
