@@ -73,20 +73,6 @@ const updateNewTweet = (tid, newUpdate) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.updateNewTweet = updateNewTweet;
-// export  const getAdminIdFromTweetId= async(tweetId:string):Promise<string>=>{
-// try {
-//     const adminID=  await TweetModel.findOne({tweetId:tweetId}).select('adminId');
-//     if(adminID){
-//         return adminID ;
-//     }
-//     else{
-//         return '';
-//     }
-// } catch (error) {
-//     console.log(error);
-//     return false;
-// }
-// }
 const getAdminIdFromTweetId = (tweetId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tweet = yield tweet_model_1.default.findOne({ tweetId }).select('adminId').lean();

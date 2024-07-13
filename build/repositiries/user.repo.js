@@ -92,8 +92,6 @@ const addUserTweets = (userId, tweetId) => __awaiter(void 0, void 0, void 0, fun
 exports.addUserTweets = addUserTweets;
 const removeUserTweet = (userId, tweetId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(userId);
-        console.log(tweetId);
         const remTweet = yield user_model_1.default.findOneAndUpdate({ userId: userId }, { $pull: { tweets: tweetId }, }, { new: true });
         if (remTweet) {
             console.log("Updated");
@@ -105,7 +103,6 @@ const removeUserTweet = (userId, tweetId) => __awaiter(void 0, void 0, void 0, f
         }
     }
     catch (error) {
-        console.log(error);
         return false;
     }
 });

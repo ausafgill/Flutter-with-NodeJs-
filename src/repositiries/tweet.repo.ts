@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { ITweetInterface } from "../database/interfaces/tweet.interface";
 import TweetModel from "../database/models/tweet.model";
+import UserModel from "../database/models/user.model";
 
 export const getTweetRepo= async (tid:string): Promise<ITweetInterface |null>=>{
     try {
@@ -57,21 +58,7 @@ export const updateNewTweet= async (tid:string,newUpdate:ITweetInterface):Promis
     }
 }
 
-// export  const getAdminIdFromTweetId= async(tweetId:string):Promise<string>=>{
-// try {
-//     const adminID=  await TweetModel.findOne({tweetId:tweetId}).select('adminId');
-//     if(adminID){
-//         return adminID ;
-//     }
-//     else{
-//         return '';
-//     }
-// } catch (error) {
-//     console.log(error);
-//     return false;
-    
-// }
-// }
+
 export const getAdminIdFromTweetId = async (tweetId: string): Promise<string> => {
     try {
         const tweet = await TweetModel.findOne({ tweetId }).select('adminId').lean();
@@ -85,3 +72,29 @@ export const getAdminIdFromTweetId = async (tweetId: string): Promise<string> =>
         return '';
     }
 };
+
+export const getAllTweetRepo= async ():Promise<any[]|null>=>{
+try {
+    const allTweets=await TweetModel.find();
+    if(!allTweets || allTweets.length==0){
+        return null;
+
+    }
+
+
+const tweetWithAdminInfo= await Promise.all(
+    allTweets.map(async(tweet)=>{
+        const admin =await UserModel.find({userId:tweet.adminId})
+        if(!admin){
+            return {tweet,admin:null};
+        }
+        return {tweet,admin}
+    })
+)
+return tweetWithAdminInfo;
+} catch (error) {
+    console.log(error);
+    return null;
+    
+}
+}

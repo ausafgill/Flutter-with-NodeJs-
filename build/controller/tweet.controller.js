@@ -55,10 +55,10 @@ exports.createTweetController = createTweetController;
 const deleteTweetController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const tweetId = req.params.tweetId;
     try {
-        console.log("ENTER");
+        // console.log("ENTER")
         const userId = yield (0, tweet_repo_1.getAdminIdFromTweetId)(tweetId);
-        console.log('tweetId:', tweetId);
-        console.log('userId:', userId);
+        // console.log('tweetId:', tweetId);
+        // console.log('userId:', userId);
         if (userId) {
             const remTweetArr = yield (0, user_repo_1.removeUserTweet)(userId, tweetId);
             if (remTweetArr) {

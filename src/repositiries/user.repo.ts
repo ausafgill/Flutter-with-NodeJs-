@@ -94,7 +94,6 @@ export const removeUserTweet=async(userId:string,tweetId:string):Promise<boolean
             return false;
         }
     } catch (error) {
-        console.log(error);
         return false;
         
     }

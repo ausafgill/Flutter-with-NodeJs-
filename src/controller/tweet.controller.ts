@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getTweetRepo, createNewTweet, updateNewTweet, deleteTweetRepo,getAdminIdFromTweetId } from "../repositiries/tweet.repo";
+import { getTweetRepo, createNewTweet, updateNewTweet, deleteTweetRepo, getAdminIdFromTweetId, getAllTweetRepo } from "../repositiries/tweet.repo";
 import { ITweetInterface } from "../database/interfaces/tweet.interface";
 import { addUserTweets, removeUserTweet } from "../repositiries/user.repo";
 import { error } from "console";
@@ -44,39 +44,39 @@ export const createTweetController = async (req: Request, res: Response) => {
     }
 }
 export const deleteTweetController = async (req: Request, res: Response) => {
- const tweetId = req.params.tweetId as string;
-  
+    const tweetId = req.params.tweetId as string;
+
 
 
 
     try {
-         console.log("ENTER")
-         
-         const userId = await getAdminIdFromTweetId(tweetId) ;
-         console.log('tweetId:', tweetId);
-         console.log('userId:', userId);
-         if(userId){
-            const remTweetArr= await removeUserTweet(userId,tweetId);
-                 
-        if(remTweetArr){
-            const delTweet = await deleteTweetRepo(tweetId);
-            if(delTweet){
-                 res.status(200).json({ data: "Tweet Deleted" });
+       // console.log("ENTER")
+
+        const userId = await getAdminIdFromTweetId(tweetId);
+        // console.log('tweetId:', tweetId);
+        // console.log('userId:', userId);
+        if (userId) {
+            const remTweetArr = await removeUserTweet(userId, tweetId);
+
+            if (remTweetArr) {
+                const delTweet = await deleteTweetRepo(tweetId);
+                if (delTweet) {
+                    res.status(200).json({ data: "Tweet Deleted" });
+                }
+                else {
+                    res.status(500).json({ error: "No Found" });
+                }
             }
-                 else {
-                           res.status(500).json({ error: "No Found" });
-                       }
-                   }
-         }
-       
+        }
 
 
 
 
 
-    
-       
-        
+
+
+
+
         else {
             res.status(500).json({ error: "No Found" });
         }
@@ -100,5 +100,21 @@ export const updateTweetController = async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error });
+    }
+}
+
+export const getAllTweetsController=async(req:Request,res:Response)=>{
+    try {
+        const allTweets=await getAllTweetRepo();
+        if(allTweets){
+            res.status(200).json({data:allTweets});
+
+        }
+        else{
+            res.status(500).json({data:'No Tweets Found'})
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error:error});
     }
 }
